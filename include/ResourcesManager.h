@@ -5,7 +5,6 @@
 #include <map>
 #include <string>
 #include <memory>
-#include <d3d9.h>
 
 class Texture {
 public:
@@ -22,9 +21,9 @@ class ResManager {
 	using StorageTy = std::map<std::string, std::unique_ptr<Texture>>;
 
 	StorageTy storage;
+	std::string base_dir;
 public:
-	static LPDIRECT3DDEVICE9 device; //FIXME: move me into some shared context?
-
+	ResManager(std::string Directory = "res/") : base_dir(Directory) {}
 	bool tryLoad(std::string ResourceName, std::string ResourceID);
 	Texture *get(std::string ResourceName);
 
@@ -32,4 +31,4 @@ public:
 	virtual ~ResManager() {};
 };
 
-#endif
+#endif // __INCLUDE_RESOURCES_MANAGER_H__

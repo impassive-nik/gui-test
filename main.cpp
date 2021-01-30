@@ -5,13 +5,16 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 #include <tchar.h>
-#include "NativeWindow.h"
 #include <memory>
+#include "NativeWindow.h"
+#include "Shared.h"
 
 // Data
-static LPDIRECT3D9              g_pD3D = NULL;
-static LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
-static D3DPRESENT_PARAMETERS    g_d3dpp = {};
+namespace shared {
+  LPDIRECT3D9              g_pD3D = NULL;
+  LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
+  D3DPRESENT_PARAMETERS    g_d3dpp = {};
+}
 
 // Forward declarations of helper functions
 bool CreateDeviceD3D(HWND hWnd);
@@ -19,10 +22,13 @@ void CleanupDeviceD3D();
 void ResetDevice();
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+using namespace shared;
+using namespace std;
+
 // Main code
-int main(int, char**)
+int main(int argc, char **argv)
 {
-  std::unique_ptr<NativeWindow> window = std::make_unique<MyWindow>();
+  unique_ptr<NativeWindow> window = make_unique<MyWindow>();
 
   // Create application window
   //ImGui_ImplWin32_EnableDpiAwareness();
@@ -55,7 +61,6 @@ int main(int, char**)
   // Setup Platform/Renderer backends
   ImGui_ImplWin32_Init(hwnd);
   ImGui_ImplDX9_Init(g_pd3dDevice);
-  ResManager::device = g_pd3dDevice;
 
   // Load Fonts
   // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.

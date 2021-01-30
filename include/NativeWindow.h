@@ -23,4 +23,4 @@ public:
 	void run() override;
 };
 
-#endif
+#endif // __INCLUDE_NATIVE_WINDOW_H__

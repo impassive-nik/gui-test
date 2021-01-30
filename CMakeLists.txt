@@ -22,7 +22,10 @@ aux_source_directory(src SRC)
 add_executable(${PROJECT_NAME} ${SRC} ${IMGUI_SRC} main.cpp)
 target_link_libraries(${PROJECT_NAME} d3d9.lib) 
 
-#TODO: copy with overwrite!
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory
-                   ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:${PROJECT_NAME}>/res)
+# Copy the resources directory
+if (EXISTS ${CMAKE_SOURCE_DIR}/res)
+  #TODO: copy with overwrite!
+  add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                     COMMAND ${CMAKE_COMMAND} -E copy_directory
+                     ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:${PROJECT_NAME}>/res)
+endif()
