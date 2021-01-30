@@ -55,6 +55,7 @@ int main(int, char**)
   // Setup Platform/Renderer backends
   ImGui_ImplWin32_Init(hwnd);
   ImGui_ImplDX9_Init(g_pd3dDevice);
+  ResManager::device = g_pd3dDevice;
 
   // Load Fonts
   // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.

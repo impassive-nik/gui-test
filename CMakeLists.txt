@@ -11,9 +11,18 @@ set(IMGUI_SRC ${IMGUI_DIR}/imgui.cpp ${IMGUI_DIR}/imgui_demo.cpp ${IMGUI_DIR}/im
 set(IMGUI_SRC ${IMGUI_SRC} ${IMGUI_DIR}/backends/imgui_impl_dx9.cpp ${IMGUI_DIR}/backends/imgui_impl_win32.cpp)
 include_directories(include ${IMGUI_DIR} ${IMGUI_DIR}/backends)
 
+# "stb" dependency
+set(STB_DIR external/stb)
+include_directories(include ${STB_DIR})
+
 # Find our own source files
 aux_source_directory(src SRC)
 
 # Create the executable file
 add_executable(${PROJECT_NAME} ${SRC} ${IMGUI_SRC} main.cpp)
 target_link_libraries(${PROJECT_NAME} d3d9.lib) 
+
+#TODO: copy with overwrite!
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                   ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:${PROJECT_NAME}>/res)

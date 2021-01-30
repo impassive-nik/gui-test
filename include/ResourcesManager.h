@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include <memory>
+#include <d3d9.h>
 
 class Texture {
 public:
@@ -22,6 +23,8 @@ class ResManager {
 
 	StorageTy storage;
 public:
+	static LPDIRECT3DDEVICE9 device; //FIXME: move me into some shared context?
+
 	bool tryLoad(std::string ResourceName, std::string ResourceID);
 	Texture *get(std::string ResourceName);
 
