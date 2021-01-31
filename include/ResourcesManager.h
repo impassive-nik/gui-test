@@ -8,27 +8,28 @@
 
 class Texture {
 public:
-	Texture(ImTextureID ID, float w, float h) : ID(ID), size(w, h) {}
-	Texture(ImTextureID ID, int w, int h) : ID(ID), size((float) w, (float) h) {}
+  Texture(ImTextureID ID, float w, float h) : ID(ID), size(w, h) {}
+  Texture(ImTextureID ID, int w, int h) : ID(ID), size((float)w, (float)h) {}
 
-	ImTextureID ID;
-	ImVec2 size;
+  ImTextureID ID;
+  ImVec2 size;
 
-	~Texture() {};
+  ~Texture(){};
 };
 
 class ResManager {
-	using StorageTy = std::map<std::string, std::unique_ptr<Texture>>;
+  using StorageTy = std::map<std::string, std::unique_ptr<Texture>>;
 
-	StorageTy storage;
-	std::string base_dir;
+  StorageTy storage;
+  std::string base_dir;
+
 public:
-	ResManager(std::string Directory = "res/") : base_dir(Directory) {}
-	bool tryLoad(std::string ResourceName, std::string ResourceID);
-	Texture *get(std::string ResourceName);
+  ResManager(std::string Directory = "res/") : base_dir(Directory) {}
+  Texture *tryLoad(std::string ResourceName, std::string ResourceID);
+  Texture *get(std::string ResourceName);
 
-	static ResManager* getInstance();
-	virtual ~ResManager() {};
+  static ResManager *getInstance();
+  virtual ~ResManager(){};
 };
 
 #endif // __INCLUDE_RESOURCES_MANAGER_H__

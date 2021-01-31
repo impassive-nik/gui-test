@@ -11,7 +11,7 @@ public:
 	const char *name;
 	ImVec4 bg_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-	NativeWindow(const char* name, int x = 10, int y = 10, int width = 1200, int height = 900) : x(x), y(y), width(width), height(height), name(name) {}
+	NativeWindow(const char* name, int x = 10, int y = 10, int width = 800, int height = 600) : x(x), y(y), width(width), height(height), name(name) {}
 	virtual void run() = 0;
 	virtual ~NativeWindow() {}
 };

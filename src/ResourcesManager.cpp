@@ -57,25 +57,27 @@ cleanup:
   return result;
 }
 
-bool ResManager::tryLoad(std::string ResourceName, std::string ResourceID) {
+Texture *ResManager::tryLoad(std::string ResourceName, std::string ResourceID) {
   auto& result = storage[ResourceName]; 
-  if (result)
-    return false; //Already exists
+  if (result) // Already exists
+    return result.get();
 
-  if (ResourceID.empty()) {
-    ImGuiIO &io = ImGui::GetIO();
-    result.reset(new Texture(io.Fonts->TexID, io.Fonts->TexWidth, io.Fonts->TexHeight));
-    return true;
-  } else {
+  if (!ResourceID.empty()) {
     PDIRECT3DTEXTURE9 texture;
     int w, h;
     if (LoadTextureFromFile(base_dir + ResourceID, &texture, &w, &h)) {
       result.reset(new Texture(texture, w, h));
-      return true;
+      return result.get();
     }
+  } else {  
+    // Load default texture 
+    //TODO: some appropriate hardcoded value for missing textures?
+    ImGuiIO &io = ImGui::GetIO();
+    result.reset(new Texture(io.Fonts->TexID, io.Fonts->TexWidth, io.Fonts->TexHeight));
+    return result.get();
   }
 
-  return false;
+  return nullptr;
 }
 
 Texture *ResManager::get(std::string ResourceName) {
