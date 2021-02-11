@@ -5,4 +5,7 @@
 TEXTURE(Cell_1, "Cell_1.png")
 TEXTURE(Cell_2, "Cell_2.png")
 
+TEXTURE(Buddy,  "Buddy.png")
+TEXTURE(Enemy,  "Enemy.png")
+
 #undef TEXTURE
