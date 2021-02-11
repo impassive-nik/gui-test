@@ -13,7 +13,7 @@ include_directories(include ${IMGUI_DIR} ${IMGUI_DIR}/backends)
 
 # "stb" dependency
 set(STB_DIR external/stb)
-include_directories(include ${STB_DIR})
+include_directories(include defines ${STB_DIR})
 
 # Find our own source files
 aux_source_directory(src SRC)

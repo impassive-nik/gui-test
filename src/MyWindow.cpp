@@ -13,12 +13,13 @@ void MyWindow::run() {
   static bool show_demo_window = false;
   static bool first_iteration = true;
   static Texture *Cell_tex[2];
+  static Texture *Body_tex;
 
   if (first_iteration) {
     first_iteration = false;
-    res_mgr->tryLoad("FontTex", ""); // FIXME: it is wrong to initialize resources here. Move later
-    Cell_tex[0] = res_mgr->tryLoad("CellA", "Cell_1.png");
-    Cell_tex[1] = res_mgr->tryLoad("CellB", "Cell_2.png");
+    Cell_tex[0] = res_mgr->get(TexturesKind::Cell_1);
+    Cell_tex[1] = res_mgr->get(TexturesKind::Cell_2);
+    Body_tex    = res_mgr->tryLoad("Body", "Body.png");
   }
   
   // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
@@ -35,6 +36,7 @@ void MyWindow::run() {
     ImGui::Begin("MainWindow", nullptr, window_flags);
 
     static Grid<bool> my_grid = {5, 5, false};
+    static int my_x = 0, my_y = 0;
 
     if (Cell_tex[0] && !my_grid.empty()) {
       int Cell_ID = 0;
@@ -43,11 +45,26 @@ void MyWindow::run() {
           if (x > 0)
             ImGui::SameLine();
 
+          auto last_x = ImGui::GetCursorPosX();
+
           ImGui::PushID(Cell_ID++);
           bool &val = my_grid.at(x, y);
-          if (ImGui::ImageButton(Cell_tex[val]->ID, Cell_tex[val]->size))
-            val = !val;
+          if (ImGui::ImageButton(Cell_tex[val]->ID, Cell_tex[val]->size)) {
+            if (Body_tex && std::abs(my_x - x) + std::abs(my_y - y) == 1) {
+              my_x = x;
+              my_y = y;
+            } else {
+              val = !val;
+            }
+          }
           ImGui::PopID();
+
+          if (Body_tex && x == my_x && y == my_y) {
+            auto cur_x = ImGui::GetCursorPosX();
+            ImGui::SameLine(last_x);
+            ImGui::ImageButton(Body_tex->ID, Body_tex->size);
+            ImGui::SetCursorPosX(cur_x);
+          }
         }
       }
     }

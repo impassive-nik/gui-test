@@ -1,0 +1,8 @@
+#ifndef TEXTURE
+#define TEXTURE(ID, PATH) 
+#endif
+
+TEXTURE(Cell_1, "Cell_1.png")
+TEXTURE(Cell_2, "Cell_2.png")
+
+#undef TEXTURE

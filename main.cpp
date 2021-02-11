@@ -28,7 +28,8 @@ using namespace std;
 // Main code
 int main(int argc, char **argv)
 {
-  unique_ptr<NativeWindow> window = make_unique<MyWindow>();
+  ResManager res_mgr;
+  unique_ptr<NativeWindow> window = make_unique<MyWindow>(&res_mgr);
 
   // Create application window
   //ImGui_ImplWin32_EnableDpiAwareness();
@@ -61,6 +62,9 @@ int main(int argc, char **argv)
   // Setup Platform/Renderer backends
   ImGui_ImplWin32_Init(hwnd);
   ImGui_ImplDX9_Init(g_pd3dDevice);
+
+  if (!res_mgr.loadDefaults())
+    goto cleanup;
 
   // Load Fonts
   // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
@@ -122,6 +126,7 @@ int main(int argc, char **argv)
       ResetDevice();
   }
 
+cleanup:
   ImGui_ImplDX9_Shutdown();
   ImGui_ImplWin32_Shutdown();
   ImGui::DestroyContext();

@@ -3,6 +3,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include <d3d9.h>
+#include <iostream>
 #include "Shared.h"
 
 ResManager Instance;
@@ -80,7 +81,35 @@ Texture *ResManager::tryLoad(std::string ResourceName, std::string ResourceID) {
   return nullptr;
 }
 
+bool ResManager::loadDefaults() {
+  static char *defaultPaths[] = {
+#define TEXTURE(ID, PATH) PATH ,
+#include "resources.def"
+      "UNDEFINED"
+  };
+
+  for (int i = 0; i < (int)TexturesKind::ENUM_END; i++) {
+    PDIRECT3DTEXTURE9 texture;
+    int w, h;
+
+    if (LoadTextureFromFile(base_dir + defaultPaths[i], &texture, &w, &h)) {
+      def_storage.emplace_back(new Texture(texture, w, h));
+    } else {
+      // TODO: proper logging instead of printing to stderr
+      std::cerr << "Missing default texture: " << base_dir + defaultPaths[i] << std::endl; 
+      def_storage.clear();
+      return false;
+    }
+  }
+  return true;
+}
+
 Texture *ResManager::get(std::string ResourceName) {
   auto result = storage.find(ResourceName);
   return result == storage.end() ? nullptr : result->second.get();
+}
+Texture *ResManager::get(TexturesKind ResourceID) {
+  int i = (int)ResourceID;
+  IM_ASSERT(i >= 0 && i < def_storage.size());
+  return def_storage[i].get();
 }
